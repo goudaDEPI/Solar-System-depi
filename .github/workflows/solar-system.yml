@@ -30,7 +30,7 @@ jobs:
               uses : actions/upload-artifact@v3 
               with :
                 name: resultee 
-                path: test-result.xml
+                path: test-results.xml
                 
 
 
