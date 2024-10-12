@@ -32,12 +32,12 @@ jobs:
               run:  npm run coverage 
 
             - name: arch result 
-              if: steps.nodejs-unit-testing-setup.outcome == 'failure' ||steps.nodejs-unit-testing.steps.outcome == 'success'
+              if: failure() && (steps.nodejs-unit-testing-setup.outcome == 'failure' || steps.nodejs-unit-testing.steps.outcome == 'success')
     
               uses : actions/upload-artifact@v3 
               with :
                 name: code_coverage_resultee  
-                path: coverage
+                path: test-results.xml
                 retention-days: 5
                 
 
