@@ -17,7 +17,9 @@ jobs:
         steps:
             - name: checkout
               uses: actions/checkout@v4
-
+            - name : unit testing
+              id: nodejs-unit-testing-step
+              run: npm test
             - name: setup node js versio 18
               uses: actions/setup-node@v3
               with:
@@ -25,13 +27,16 @@ jobs:
 
             - name: install depend.
               run: npm install
-              
+
             - name: check code coverage 
               run:  npm run coverage 
+
             - name: arch result 
+              if: steps.nodejs-unit-testing-setup.outcome == 'failure' ||steps.nodejs-unit-testing.steps.outcome == 'success'
+    
               uses : actions/upload-artifact@v3 
               with :
-                name: code_coverage_resultee 
+                name: code_coverage_resultee  
                 path: coverage
                 retention-days: 5
                 
