@@ -10,6 +10,35 @@ env:
     MONGO_USERNAME: ${{vars.MONGO_USERNAME}}
     MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
 jobs:
+   unit-testing:
+        name: unit testing
+        strategy:
+            matrix:
+                nodejs_version: [18,19,20]
+                operating_system: [ubuntu-latest,macos-latest]
+                exclude:
+                    - nodejs_version: 18
+                    - operating_system : macos-latest
+        runs-on: ${{matrix.operating_system}}
+        steps:
+            - name: checkout
+              uses: actions/checkout@v4
+
+            - name: setup node js versio 18
+              uses: actions/setup-node@v3
+              with:
+                node-version: ${{matrix.nodejs_version}}
+
+            - name: install depend.
+              run: npm install
+            - name: unit testing
+              run: npm test
+            - name: arch result 
+              if: failure() && (steps.nodejs-unit-testing-setup.outcome == 'failure' || steps.nodejs-unit-testing.steps.outcome == 'success')
+              uses : actions/upload-artifact@v3 
+              with :
+                name: resultee 
+                path: test-results.xml       
     code-coverage:
         name: code coverage
         
@@ -17,9 +46,7 @@ jobs:
         steps:
             - name: checkout
               uses: actions/checkout@v4
-            - name : unit testing
-              id: nodejs-unit-testing-step
-              run: npm test
+        
             - name: setup node js versio 18
               uses: actions/setup-node@v3
               with:
@@ -31,14 +58,14 @@ jobs:
             - name: check code coverage 
               run:  npm run coverage 
 
-            - name: arch result 
-              if: failure() && (steps.nodejs-unit-testing-setup.outcome == 'failure' || steps.nodejs-unit-testing.steps.outcome == 'success')
+            #- name: arch result 
+             # if: failure() && (steps.nodejs-unit-testing-setup.outcome == 'failure' || steps.nodejs-unit-testing.steps.outcome == 'success')
     
-              uses : actions/upload-artifact@v3 
-              with :
-                name: code_coverage_resultee  
-                path: test-results.xml
-                retention-days: 5
+             # uses : actions/upload-artifact@v3 
+             # with :
+              #  name: code_coverage_resultee  
+              #  path: test-results.xml
+               # retention-days: 5
                 
 
 
