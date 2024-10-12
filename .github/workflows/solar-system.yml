@@ -9,8 +9,9 @@ env:
     MONGO_URI: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
     MONGO_USERNAME: ${{vars.MONGO_USERNAME}}
     MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
+
 jobs:
-   unit-testing:
+    unit-testing:
         name: unit testing
         strategy:
             matrix:
@@ -34,38 +35,12 @@ jobs:
             - name: unit testing
               run: npm test
             - name: arch result 
-              if: failure() && (steps.nodejs-unit-testing-setup.outcome == 'failure' || steps.nodejs-unit-testing.steps.outcome == 'success')
               uses : actions/upload-artifact@v3 
               with :
                 name: resultee 
-                path: test-results.xml       
-    code-coverage:
-        name: code coverage
-        
-        runs-on: ubuntu-latest
-        steps:
-            - name: checkout
-              uses: actions/checkout@v4
-        
-            - name: setup node js versio 18
-              uses: actions/setup-node@v3
-              with:
-                node-version: 18
+                path: test-results.xml
 
-            - name: install depend.
-              run: npm install
 
-            - name: check code coverage 
-              run:  npm run coverage 
-
-            #- name: arch result 
-             # if: failure() && (steps.nodejs-unit-testing-setup.outcome == 'failure' || steps.nodejs-unit-testing.steps.outcome == 'success')
-    
-             # uses : actions/upload-artifact@v3 
-             # with :
-              #  name: code_coverage_resultee  
-              #  path: test-results.xml
-               # retention-days: 5
                 
 
 
