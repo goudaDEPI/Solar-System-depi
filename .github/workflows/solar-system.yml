@@ -29,7 +29,7 @@ jobs:
             - name: unit testing
               run: npm test
             - name: arch result 
-              uses : actions/upload-artifact@v3 
+              uses : actions/upload-artifact@v4 
               with :
                 name: resultee 
                 path: test-results.xml
@@ -52,7 +52,7 @@ jobs:
               run: npm run coverage
             - name: arch result 
               if: always()
-              uses : actions/upload-artifact@v3 
+              uses : actions/upload-artifact@v4 
               with :
                 name: code coverage resultee 
                 path: coverage
