@@ -51,6 +51,7 @@ jobs:
             - name: check code coverage
               run: npm run coverage
             - name: arch result 
+              if: always()
               uses : actions/upload-artifact@v3 
               with :
                 name: code coverage resultee 
